@@ -44,7 +44,7 @@ public class Logic {
 		
 		for (int r = 0; r < pixel2D.length; r++) {
 			for (int c = 0; c < pixel2D[r].length; c++) {
-				
+			// setting rgb values to the opposite spectrum of values 
 				pixel2D[r][c].setRed(255-(pixel2D[r][c].getRed()));
 				pixel2D[r][c].setGreen(255-(pixel2D[r][c].getGreen()));
 				pixel2D[r][c].setBlue(255-(pixel2D[r][c].getBlue()));
@@ -78,10 +78,11 @@ public class Logic {
 		for (int c = 0; c < pixel2D[0].length/2; c++) {
 			for (int r = 0; r < pixel2D.length; r++) {
 				//recording initial values
-				// set sides to the opposite values
+				
 				int red = pixel2D[r][c].getRed();
 				int green = pixel2D[r][c].getGreen();
 				int blue = pixel2D[r][c].getBlue();
+				// set sides to the opposite values
 				pixel2D[r][c].setRed(pixel2D[r][pixel2D[r].length - 1 - c].getRed());
 				pixel2D[r][pixel2D[r].length - 1 - c].setRed(red);
 				pixel2D[r][c].setGreen(pixel2D[r][pixel2D[r].length - 1 - c].getGreen());
@@ -97,25 +98,27 @@ public class Logic {
 			
 			for (int r = 0; r < pixel2D.length; r++) {
 				for (int c = 0; c < pixel2D[r].length; c++) {
-					int red = (int)(re*pixel2D[r][c].getRed());
-					int gr = (int)(gbl*pixel2D[r][c].getGreen());
-					int bl = (int)(gbl*pixel2D[r][c].getBlue());
-					pixel2D[r][c].setRed(red);
-					pixel2D[r][c].setGreen(gr);
-					pixel2D[r][c].setBlue(bl);				
+					//setting rgb values to changed values, which are the og values multiplied by multipliers
+					pixel2D[r][c].setRed((int)(re*pixel2D[r][c].getRed()));
+					pixel2D[r][c].setGreen((int)(gbl*pixel2D[r][c].getGreen()));
+					pixel2D[r][c].setBlue((int)(gbl*pixel2D[r][c].getBlue()));				
 				}
 			
 			}		
 		}
 		public static void blur(DigitalPicture picture) {
 			Pixel[][] pixel2D = picture.getPixels2D();
+			//initializing sums for each rgb value to be averaged
 			int sumR = 0;
 			int sumG = 0;
 			int sumB = 0;
+			//traversing each pixel
 			for (int r = 1; r < pixel2D.length; r++) {
 				for (int c = 1; c < pixel2D[r].length; c++) {
+					//traversing each pixel in 2x2 squares
 					for (int x = r; x >= r - 1; x--) {
 						for (int y = c; y >= c-1 ; y--) {
+							// summing all of each rgb values
 							sumR += pixel2D[x][y].getRed();
 							sumG += pixel2D[x][y].getGreen();
 							sumB += pixel2D[x][y].getBlue();
@@ -123,14 +126,17 @@ public class Logic {
 						}
 						
 					}
+					// averaging the sums
 					sumR /= 4;
 					sumG /= 4;
 					sumB /= 4;
+					//setting values
 					pixel2D[r][c].setRed(sumR);
 					pixel2D[r][c].setGreen(sumG);
 					pixel2D[r][c].setBlue(sumB);
+					//resetting sums for next 2x2 square
 					sumR = 0;
-					sumG = 0;
+					sumG = 0; 
 					sumB = 0;
 				
 				}
